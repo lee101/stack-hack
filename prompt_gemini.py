@@ -5,7 +5,7 @@ import google.generativeai as genai
 from typing import Optional
 genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 
-def gemini_generation(input_text: str, history: Optional[list] = None) -> str:
+def gemini_generation(input_text: str, history: Optional[list] = None, system_instruction: Optional[str] = None) -> str:
 
     # Create the model
     generation_config = {
@@ -20,6 +20,7 @@ def gemini_generation(input_text: str, history: Optional[list] = None) -> str:
         # model_name="gemini-2.0-flash-exp",
         model_name="gemini-1.5-flash-8b",
         generation_config=generation_config,
+        system_instruction=system_instruction
     )
 
     chat_session = model.start_chat(
@@ -43,13 +44,21 @@ def analyze_html_content(html_content: str) -> str:
 @file_cache(cache_dir="cache")
 def get_similar_domain_names(domain: str) -> list[str]:
     """Get similar domain names using Gemini"""
-    prompt = f"""Getting design inspiration, Give me a list of similar popular domains to {domain} i can take a look at, give me 15, one each line eg:
-domain1.com
-domain2.com
-domain3.com
-""" 
-    sites = gemini_generation(prompt).strip().split('\n')
-    return sites
+    # First get initial similar sites
+    # prompt = f"What are 5 similar domains to midjourney.com? Only list real domain names, one per line."
+    history = []
+    
+#     history.append({"role": "user", "parts": [prompt]})
+#     history.append({"role": "model", "parts": ["""craiyon.com
+# krea.ai 
+# artbreeder.com
+# imagine.com
+# runwayml.com"""]})
+    prompt = f"What are 5 similar domains to {domain}? Only list real domain names, one per line."
+    
+    more_sites = gemini_generation(prompt, history, system_instruction="You are a helpful assistant that provides domain names of other popular sites given a domain, different varieties. Only provide real domain names, one per line. eg: google.com").strip().split('\n')
+    
+    return more_sites
 
 def analyze_site(domain: str, results_dir: Path = Path('results'), prompt_results_dir: Path = Path('prompt_results')) -> str:
     # Check if results directory exists
