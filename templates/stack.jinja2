@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stack Analysis - {{ domain }}</title>
+</head>
+<body style="font-family: 'Courier New', monospace; background-color: black; color: #02c402; margin: 0; padding: 20px;">
+  <div style="max-width: 800px; margin: 0 auto;">
+    <h1 style="font-size: 2em; margin-bottom: 1em;">Stack Analysis for {{ domain }}</h1>
+    
+    <!-- Analysis Results -->
+    <div style="white-space: pre-wrap; font-size: 1em; line-height: 1.5; padding: 1em; border: 1px solid #02c402;">
+      {{ analysis }}
+    </div>
+
+    <h2 style="font-size: 1.5em; margin-top: 2em;">Similar Sites</h2>
+    <div>
+      {% for domain in domains %}
+        <a href="/stack/{{ domain }}" style="color: #02c402; text-decoration: none; border: 1px solid #02c402; padding: 0.5em 1em; line-height: 1.5; display: inline-block; margin: 0.5em;">{{ domain }}</a>
+      {% endfor %}
+    </div>
+
+    <!-- Back Button -->
+    <div style="margin-top: 2em;">
+      <a href="/" style="color: #02c402; text-decoration: none; border: 1px solid #02c402; padding: 0.5em 1em;">
+        &lt; Back to Search
+      </a>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stack Hack</title>
+</head>
+<body style="font-family: 'Courier New', monospace; background-color: black; color: #02c402; margin: 0; padding: 0;">
+  <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh;">
+    <!-- Minimal Logo -->
+    <h1 style="font-size: 3em; margin-bottom: 1em;">STACK HACK</h1>
+    <!-- Search bar -->
+    <form onsubmit="event.preventDefault(); goToDomainStack();">
+      <input 
+        type="text" 
+        id="domainInput" 
+        placeholder="Enter domain" 
+        style="font-family: 'Courier New', monospace; font-size: 1em; padding: 0.5em; background-color: black; color: #02c402; border: 1px solid #02c402; width: 300px;"
+      />
+    </form>
+    <h3 style="color: #02c402; margin-top: 1em; margin-bottom: 1em;">Examples:</h3>
+    <div>
+      {% for domain in domains %}
+        <a href="/stack/{{ domain }}" style="color: #02c402; text-decoration: none; border: 1px solid #02c402; padding: 0.5em 1em; line-height: 1.5; display: inline-block; margin: 0.5em;">{{ domain }}</a>
+      {% endfor %}
+    </div>
+  </div>
+  <script>
+    function goToDomainStack() {
+      let domain = document.getElementById('domainInput').value.trim();
+      if(domain) {
+        window.location.href = "/stack/" + domain;
+      }
+    }
+  </script>
+</body>
+</html>

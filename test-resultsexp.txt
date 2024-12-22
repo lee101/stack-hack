@@ -1,0 +1,52 @@
+Okay, let's break down the technology stack used to create this website based on the provided HTML code.
+1. Core Technologies
+HTML: The fundamental markup language for structuring the content and layout of the web page. The provided code is the HTML structure of the site.
+CSS: Used for styling the website's appearance (layout, colors, fonts, etc.).
+Custom CSS: Multiple custom CSS files are included:
+/css/site.css: Likely contains the core styles for the website.
+/css/site.tablet.css: Styles that are applied when the website is viewed on tablet-sized devices (using media queries).
+/css/abilities.mobile.css: Seems specific styling for the "abilities" page on mobile.
+/css/site.mobile.css: Styles for mobile devices.
+Swiper CSS: Includes /css/swiper.css for the Swiper library.
+JavaScript: Used for adding interactivity and dynamic behavior to the site.
+jQuery: A popular JavaScript library for DOM manipulation, AJAX, event handling, etc. (from Google's CDN: https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js).
+jQuery Mousewheel Plugin: A plugin for jQuery that handles mousewheel events (/js/jquery.mousewheel.js).
+Swiper.js: A JavaScript library used for creating touch-enabled sliders and carousels (/js/swiper.min.js).
+Custom JS: The script section at the top and lazy.js contains custom JavaScript code specific to this website (/js/lazy.js)
+YouTube Iframe API: Used to control embedded YouTube videos through JavaScript, allowing video playback to be controlled using custom buttons.
+2. JavaScript Libraries
+jQuery: As mentioned, a foundation for many web interactions.
+jQuery Mousewheel: Specifically for handling mousewheel events on elements.
+Swiper.js: Provides the functionality for the carousel/slider used on the page.
+YouTube Iframe API: Allows JavaScript control over embedded YouTube videos, which helps enable things like play/stop, custom player controls, etc.
+3. CSS Frameworks/Libraries
+No Framework: It doesn't appear that a large CSS framework like Bootstrap or Tailwind CSS is being used. Instead, there are multiple custom CSS files likely structuring the site.
+4. CDN Usage
+Google Hosted Libraries: Uses Google's CDN to load the jQuery library (https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js).
+YouTube API: Loads the YouTube Iframe API asynchronously.
+5. Key Techniques & Features
+Responsive Design:
+Meta Viewport Tag: The <meta name="viewport"> tag is used to set up the viewport for responsiveness (initial-scale, maximum-scale, minimum-scale, user-scalable).
+Media Queries in CSS: The use of separate CSS files for tablet and mobile indicates that media queries are being used to adapt the site's layout based on screen size.
+Image Optimization:
+Lazy Loading: The use of the lazyload class and the /js/lazy.js script indicates that images are lazy-loaded for performance (images will load only when they are visible in the viewport).
+Browser Detection:
+User Agent Sniffing: The navigator.sayswho function attempts to identify the user's browser using the User Agent string. This may be used for browser-specific fixes or behaviors, although this approach is generally not recommended due to potential inaccuracies.
+Touch Support: The itemslide events and swiper library show that the site is intended to support touch gestures, which is particularly important for mobile devices.
+YouTube Embed: The site embeds a YouTube video using an iframe and uses the YouTube Iframe API to handle playback, stop, and show/hide behaviors.
+Cookies: The scripts mention storeCookies() indicating some sort of cookie usage to store data.
+Google Analytics: Implemented via a gtag.js script tag, tracking site usage data.
+Progressive Web App (PWA) related assets
+Apple Touch Icons: Multiple Apple touch icons of various sizes are added for iOS devices.
+Favicons: Regular favicon and sizes for different devices.
+Android icons: android-icon-192x192.png is present.
+Manifest file: /manifest.json suggests the use of a PWA approach.
+Verification Meta Tags:
+Google Site Verification: <meta name="google-site-verification"...> for confirming the site's ownership to Google.
+Facebook Domain Verification: <meta name="facebook-domain-verification"...> for verifying domain ownership with Facebook.
+6. Server-Side Language
+Not directly evident: The code doesn't explicitly show a server-side language, but it is implied that some server side language handles the endpoint to the iframe (/iframe), possibly a server side application.
+7. Possible Build Tools
+Not obvious: The code doesn't indicate the use of build tools (Webpack, Parcel, etc.). It could be a manually set up project, or there could be build processes taking place behind the scenes that aren't reflected in this HTML code.
+Summary
+This website is built on a solid foundation of HTML, CSS, and JavaScript. It uses jQuery, Swiper.js, and YouTube API to enhance functionality. The focus is on responsiveness, touch support, and good performance by utilizing techniques such as lazy loading. It also utilizes Google Analytics to track user behavior. The code indicates a focus on mobile users with specialized mobile styles and touch support. The site is a somewhat older stack, using older jQuery and the Google Analytics API that's slightly older as well, it could benefit from an update to a more modern tech stack.

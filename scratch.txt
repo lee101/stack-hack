@@ -1,0 +1,15 @@
+cost:
+
+8000 tokens
+ $0.075/1 million tokens
+ 2k output at .3/million
+
+so for 1 request:
+8000 tokens * ($0.075/1000000) = $0.0006 input cost
+2000 tokens * ($0.3/1000000) = $0.0006 output cost
+Total per request = $0.0012
+
+For 1 million requests:
+Input cost: $0.0006 * 1000000 = $600
+Output cost: $0.0006 * 1000000 = $600  
+Total cost = $1200
