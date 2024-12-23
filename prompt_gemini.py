@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import random
 from filecache import file_cache
 import google.generativeai as genai
 from typing import Optional
@@ -55,8 +56,35 @@ def get_similar_domain_names(domain: str) -> list[str]:
 # imagine.com
 # runwayml.com"""]})
     prompt = f"What are 5 similar domains to {domain}? Only list real domain names, one per line."
+
+    domain_example = random.choice([
+        "craiyon.com",
+        "krea.ai",
+        "artbreeder.com",
+        "imagine.com",
+        "runwayml.com",
+        "photopea.com",
+        "looka.com",
+        "canva.com",
+        "designevo.com",
+        "fotor.com",
+        "pixlr.com",
+        "picmonkey.com",
+        "crello.com",
+        "midjourney.com",
+        "clipdrop.co",
+        "nike.com",
+        "amazon.com",
+        "google.com",
+        "facebook.com",
+        "twitter.com",
+        "instagram.com",
+        "youtube.com",
+        "linkedin.com",
+        "pinterest.com",
+    ])
     
-    more_sites = gemini_generation(prompt, history, system_instruction="You are a helpful assistant that provides domain names of other popular sites given a domain, different varieties. Only provide real domain names, one per line. eg: google.com").strip().split('\n')
+    more_sites = gemini_generation(prompt, history, system_instruction=f"You are a helpful assistant that provides domain names of other popular sites given a domain, different varieties. Only provide real domain names, one per line. eg: {domain_example}").strip().split('\n')
     
     return more_sites
 
