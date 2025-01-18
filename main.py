@@ -51,13 +51,15 @@ async def get_stack_analysis(request: Request, domain: str):
         raise HTTPException(status_code=500, detail=str(e))
     
 # Global file data
-csv_file = Path('cloudflare-radar_top-1000000-domains_20241213-20241220.csv')
+# csv_file = Path('cloudflare-radar_top-1000000-domains_20241213-20241220.csv')
+
+# Instead read all files from results/*.html (the filenames are the domains)
+results_dir = Path('results')
 
 # Read all domains into memory globally
 all_domains = []
-with csv_file.open('r') as f:
-    reader = csv.reader(f)
-    all_domains = [row[0] for row in reader]
+for file_path in results_dir.glob("*.html"):
+    all_domains.append(file_path.stem)
 
 @app.get("/sitemap{num}.xml") 
 async def get_sitemap(num: int):
