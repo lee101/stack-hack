@@ -1,12 +1,23 @@
 import os
 from pathlib import Path
 import random
+import re
+from typing import Optional
+
+from bs4 import BeautifulSoup, Comment
 from filecache import file_cache
 import google.generativeai as genai
-from typing import Optional
-genai.configure(api_key=os.environ["GEMINI_API_KEY"])
+
+api_key = os.environ.get("GEMINI_API_KEY")
+if api_key:
+    genai.configure(api_key=api_key)
 
 def gemini_generation(input_text: str, history: Optional[list] = None, system_instruction: Optional[str] = None) -> str:
+    key = os.environ.get("GEMINI_API_KEY")
+    if not key:
+        raise RuntimeError("GEMINI_API_KEY is not configured")
+    if key != api_key:
+        genai.configure(api_key=key)
 
     # Create the model
     generation_config = {
@@ -32,13 +43,48 @@ def gemini_generation(input_text: str, history: Optional[list] = None, system_in
     return response.text
 
 
-results_dir = Path('results')
-prompt_results_dir = Path('prompt_results')
+results_dir = Path(os.getenv("RESULTS_DIR", "results"))
+prompt_results_dir = Path(os.getenv("PROMPT_RESULTS_DIR", "prompt_results"))
+
+def clean_html_for_prompt(html_content: str) -> str:
+    """Remove noisy tags and large base64 blobs from HTML."""
+    soup = BeautifulSoup(html_content, "html.parser")
+    # Strip HTML comments
+    for comment in soup.find_all(string=lambda t: isinstance(t, Comment)):
+        comment.extract()
+
+    # Remove tags that rarely contain useful text
+    for tag in soup([
+        "script",
+        "style",
+        "canvas",
+        "video",
+        "audio",
+        "svg",
+        "meta",
+        "link",
+        "nav",
+        "footer",
+        "header",
+    ]):
+        tag.decompose()
+    cleaned = str(soup)
+    # remove data URIs
+    cleaned = re.sub(r'data:image/[^;]+;base64,[^"\'\s>]+', '', cleaned)
+    # remove long base64-like strings
+    cleaned = re.sub(r'[A-Za-z0-9+/]{1000,}={0,2}', '', cleaned)
+    # collapse repeated whitespace
+    cleaned = re.sub(r'\s+', ' ', cleaned)
+    return cleaned.strip()
 def analyze_html_content(html_content: str) -> str:
     """Analyzes HTML content using Gemini to determine tech stack"""
-    # Create prompt with HTML content
-    prompt = f"{html_content}\n\n\nPlease give a detailed breakdown of the stack used to make this site, cdn, js libraries css libraries, techniques etc used to make this site :)"
-    
+    cleaned = clean_html_for_prompt(html_content)
+    prompt = (
+        f"{cleaned}\n\n\nPlease give a detailed breakdown of the stack used to"
+        " make this site, cdn, js libraries css libraries, techniques etc used to"
+        " make this site :)"
+    )
+
     # Get analysis from Gemini
     return gemini_generation(prompt)
 
@@ -88,7 +134,7 @@ def get_similar_domain_names(domain: str) -> list[str]:
     
     return more_sites
 
-def analyze_site(domain: str, results_dir: Path = Path('results'), prompt_results_dir: Path = Path('prompt_results')) -> str:
+def analyze_site(domain: str) -> str:
     # Check if results directory exists
     if not results_dir.exists():
         print("Results directory not found")
@@ -111,17 +157,19 @@ def analyze_site(domain: str, results_dir: Path = Path('results'), prompt_result
     
     try:
         # Read HTML content
-        html_content = file_path.read_text(encoding='utf-8')
-        
+        html_content = file_path.read_text(encoding="utf-8")
+
         # Get analysis from Gemini
         analysis = analyze_html_content(html_content)
-        
+
         # Save analysis to a new file in prompt_results directory
-        analysis_file.write_text(f"Analysis for {domain}:\n\n{analysis}", encoding='utf-8')
-            
+        analysis_file.write_text(
+            f"Analysis for {domain}:\n\n{analysis}", encoding="utf-8"
+        )
+
         print(f"Completed analysis for {domain}")
         return analysis
-        
+
     except Exception as e:
         print(f"Error analyzing {domain}: {str(e)}")
         return ""
